@@ -3,21 +3,18 @@ package com.coderel.project1;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class MainActivity extends ActionBarActivity {
+
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private Uri fileUri;
@@ -27,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Button button = (Button) findViewById(R.id.button);
@@ -49,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
 
 
         PhotoResizeTask photoResizeTask = new PhotoResizeTask(getApplicationContext());
@@ -58,6 +56,18 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("path", fileUri.getPath());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        fileUri = Uri.fromFile(new File(savedInstanceState.getString("path")));
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,41 +96,9 @@ public class MainActivity extends ActionBarActivity {
      * Create a file Uri for saving an image or video
      */
     private Uri getOutputMediaFileUri() {
-        return Uri.fromFile(getOutputMediaFile());
+        return Uri.fromFile(PhotoManager.getOutputMediaFile(getApplicationContext(), true));
     }
 
-    /**
-     * Create a File for saving an image or video
-     */
-    private File getOutputMediaFile() {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
-        
-
-            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "MyCameraApp");
-            // This location works best if you want the created images to be shared
-            // between applications and persist after your app has been uninstalled.
-
-            // Create the storage directory if it does not exist
-            if (!mediaStorageDir.exists()) {
-                if (!mediaStorageDir.mkdirs()) {
-                    Log.d("MyCameraApp", "failed to create directory");
-                    return null;
-                }
-
-
-            }
-
-            // Create a media file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File mediaFile;
-
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-            return mediaFile;
-
-    }
 
 }

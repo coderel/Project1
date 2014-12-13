@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -19,10 +18,8 @@ import java.io.IOException;
  */
 public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private Uri fileUri;
-    private static final int IMAGE_INTENT_CODE = 100;
     private Bitmap squareBitmap;
-    private Context mContext;
+    private final Context mContext;
 
     PhotoResizeTask(Context context) {
         mContext = context;
@@ -37,7 +34,6 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         int cropValue;
 
         String photoPath = uris[0].getPath();
-        int difference;
         Log.v("Photopath", photoPath);
         final BitmapFactory.Options options = new BitmapFactory.Options();
         int[] dimensions = PhotoManager.checkPhotoDimensions(photoPath);
@@ -46,11 +42,18 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
 
         //load the bitmap in most minimum size possible
         Bitmap originalBitmap = BitmapFactory.decodeFile(photoPath, options);
+
+        //delete the original photo after loading
+        if (PhotoManager.deleteFile(photoPath)) {
+            Log.v("FILE DELETED", "COMPLETELY");
+        }
+
+
         cropValue = Math.abs(originalBitmap.getWidth() - originalBitmap.getHeight());
 
 
-        Double d = new Double(Math.signum(dimensions[2]));
-        photoShape = d.intValue();
+        photoShape = (int) Math.signum(dimensions[2]);
+        // photoShape = d.intValue();
 
 
         switch (photoShape) {
@@ -75,10 +78,9 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         //saving bitmap to JPEG in sd card
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         squareBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File path = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+        File f = PhotoManager.getOutputMediaFile(mContext, false);
 
-        File f = new File(path, "output1.jpg");
+
         try {
             Log.v(LOG_TAG, "CREATING FILE");
             f.createNewFile();

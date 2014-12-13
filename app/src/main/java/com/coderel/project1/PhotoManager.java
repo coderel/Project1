@@ -1,11 +1,17 @@
 package com.coderel.project1;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Prasanna on 12/13/2014.
  */
-public class PhotoManager {
+class PhotoManager {
 
     public static int[] checkPhotoDimensions(String path) {
 
@@ -22,9 +28,46 @@ public class PhotoManager {
     }
 
     public static int determineScaleFactor(int width, int height) {
-        int scaleFactor;
 
         return (width / 600 < height / 600 ? width / 600 : height / 600);
+    }
+
+    /**
+     * Create a File for saving an image or video
+     */
+    public static File getOutputMediaFile(Context context, boolean privacy) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+            // Create a media file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String mediaFile = "IMG_" + timeStamp + ".jpg";
+            String publicDirectory = "DVpics";
+            File mediaStorageFile;
+            File mediaStorageDirectory;
+
+            if (privacy) {
+                mediaStorageFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), mediaFile);
+            } else {
+                mediaStorageDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), publicDirectory);
+                mediaStorageDirectory.mkdirs();
+                mediaStorageFile = new File(mediaStorageDirectory, mediaFile);
+
+
+            }
+            return mediaStorageFile;
+
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean deleteFile(String path) {
+
+        File file = new File(path);
+        return file.delete();
     }
 }
 
