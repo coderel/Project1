@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DV Form Photo</string>
+    <string name="action_settings">Settings</string>
+
+    <!--Strings for Layout views -->
+    <string name="button_take_picuture">Take Picture</string>
+
+</resources>
