@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
-        Button button = (Button) findViewById(R.id.button);
+        Button button = (Button) findViewById(R.id.button_take_picture);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

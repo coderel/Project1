@@ -13,9 +13,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_take_picuture"
-        android:id="@+id/button"
+        android:id="@+id/button_take_picture"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="173dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:text="@string/portrait_instruction"
+        android:id="@+id/textView_portrait_instruction"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="65dp" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:text="@string/landscape_instruction"
+        android:id="@+id/textView_landscape_instruction"
+        android:gravity="clip_horizontal"
+        android:layout_alignTop="@+id/textView_portrait_instruction"
+        android:layout_alignRight="@+id/button_take_picture"
+        android:layout_alignEnd="@+id/button_take_picture" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dont_show_this_again"
+        android:id="@+id/checkBox"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
 
 </RelativeLayout>

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DV Form Photo</string>
+    <string name="app_name" translatable="false">DV Form Photo</string>
     <string name="action_settings">Settings</string>
 
     <!--Strings for Layout views -->
     <string name="button_take_picuture">Take Picture</string>
+    <string name="dont_show_this_again">Don't show this again</string>
+
+    <!--Strings for Instructions-->
+    <string name="portrait_instruction">If you are taking picture in portrait mode put the head in the middle vertically as shown in the above figure</string>
+    <string name="landscape_instruction">If you are taking picture in Landscape mode put the head in the middle horizontally as shown in the above figure</string>
 
 </resources>
