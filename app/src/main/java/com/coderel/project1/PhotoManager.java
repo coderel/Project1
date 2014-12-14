@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by Prasanna on 12/13/2014.
  */
-class PhotoManager {
+public class PhotoManager {
 
     public static int[] checkPhotoDimensions(String path) {
 
