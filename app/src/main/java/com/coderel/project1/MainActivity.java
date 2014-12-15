@@ -1,6 +1,7 @@
 package com.coderel.project1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import java.io.File;
 
@@ -17,6 +19,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    public static final String PREFS_NAME = "instructionPreference";
     private Uri fileUri;
 
 
@@ -25,24 +28,45 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        SharedPreferences instructionPreference = getPreferences(MODE_PRIVATE);
+        boolean doNotShowInstruction = instructionPreference.getBoolean(PREFS_NAME, false);
 
-        Button button = (Button) findViewById(R.id.button_take_picture);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // create Intent to take a picture and return control to the calling application
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (doNotShowInstruction) {
 
-                fileUri = getOutputMediaFileUri();
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-                // start the image capture Intent
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            startCameraIntent();
 
 
-            }
-        });
+
+
+
+        } else {
+
+            setContentView(R.layout.activity_main);
+
+            Button button = (Button) findViewById(R.id.button_take_picture);
+
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startCameraIntent();
+                }
+            });
+
+        }
+    }
+
+    private  void startCameraIntent(){
+        // create Intent to take a picture and return control to the calling application
+
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     @Override
@@ -52,6 +76,9 @@ public class MainActivity extends ActionBarActivity {
 
         PhotoResizeTask photoResizeTask = new PhotoResizeTask(getApplicationContext());
         photoResizeTask.execute(fileUri);
+
+        Intent anotherPhotoIntent = new Intent(this,AnotherPhotoActivity.class);
+        startActivity(anotherPhotoIntent);
 
 
     }
@@ -68,6 +95,25 @@ public class MainActivity extends ActionBarActivity {
         fileUri = Uri.fromFile(new File(savedInstanceState.getString("path")));
 
     }
+
+    public void onCheckboxClick(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+        if(checked){
+            SharedPreferences instructionPreference = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = instructionPreference.edit();
+            editor.putBoolean(PREFS_NAME,true);
+            editor.commit();
+        } else {
+            SharedPreferences instructionPreference = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = instructionPreference.edit();
+            editor.putBoolean(PREFS_NAME,false);
+            editor.commit();
+        }
+
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
