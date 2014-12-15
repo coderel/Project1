@@ -13,7 +13,7 @@ public class ShareActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
-        //This is a test for social branch
+        //This is a test for social branch second
     }
 
 
