@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,8 @@ public class MainActivity extends ActionBarActivity {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final String PREFS_NAME = "instructionPreference";
-    private Uri fileUri;
+    public static Uri fileUri;
+    public static File photoFile;
 
 
 
@@ -28,20 +30,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences instructionPreference = getPreferences(MODE_PRIVATE);
-        boolean doNotShowInstruction = instructionPreference.getBoolean(PREFS_NAME, false);
-
-        if (doNotShowInstruction) {
-
-            startCameraIntent();
 
 
 
 
-
-        } else {
-
-            setContentView(R.layout.activity_main);
+           setContentView(R.layout.activity_main);
 
             Button button = (Button) findViewById(R.id.button_take_picture);
 
@@ -53,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
 
-        }
+
     }
 
     private  void startCameraIntent(){
@@ -74,10 +67,10 @@ public class MainActivity extends ActionBarActivity {
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-        PhotoResizeTask photoResizeTask = new PhotoResizeTask(getApplicationContext());
-        photoResizeTask.execute(fileUri);
+
 
         Intent anotherPhotoIntent = new Intent(this,AnotherPhotoActivity.class);
+//        Log.v("filePath in main activity", photoFile.getAbsolutePath());
         startActivity(anotherPhotoIntent);
 
 

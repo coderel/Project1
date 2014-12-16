@@ -1,5 +1,6 @@
 package com.coderel.project1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,8 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,14 +20,38 @@ import java.io.IOException;
  * Created by Prasanna on 12/6/2014.
  */
 public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
+
+
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.photoFile.getAbsolutePath());
+        Log.v("size of image view pic",Integer.toString(bitmap.getHeight()));
+        rootView.setImageBitmap(bitmap);
+        rootView.invalidate();
+
+
+    }
+
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private Bitmap squareBitmap;
     private final Context mContext;
+    private ImageView rootView;
 
-    PhotoResizeTask(Context context) {
-        mContext = context;
+
+    PhotoResizeTask(Context context,View view) {
+        this.mContext = context;
+        this.rootView = (ImageView)view;
+
+
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
 
     @Override
     protected Void doInBackground(Uri... uris) {
@@ -32,6 +59,7 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         int photoShape; // to determine the shape of the picture (Portrait, landscape or square). Positive = landscape, Negative = portrait, 0 = square
         int scaleFactor;
         int cropValue;
+
 
         String photoPath = uris[0].getPath();
         Log.v("Photopath", photoPath);
@@ -42,11 +70,15 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
 
         //load the bitmap in most minimum size possible
         Bitmap originalBitmap = BitmapFactory.decodeFile(photoPath, options);
+//        Log.v("HEIGHT",Integer.toString(originalBitmap.getHeight()));
+//        Log.v("WIDTH",Integer.toString(originalBitmap.getWidth()));
 
+/*
         //delete the original photo after loading
         if (PhotoManager.deleteFile(photoPath)) {
             Log.v("FILE DELETED", "COMPLETELY");
         }
+*/
 
 
         cropValue = Math.abs(originalBitmap.getWidth() - originalBitmap.getHeight());
@@ -78,22 +110,22 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         //saving bitmap to JPEG in sd card
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         squareBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File f = PhotoManager.getOutputMediaFile(mContext, false);
+        MainActivity.photoFile = PhotoManager.getOutputMediaFile(mContext, false);
 
 
         try {
             Log.v(LOG_TAG, "CREATING FILE");
-            f.createNewFile();
+            MainActivity.photoFile.createNewFile();
 
-            FileOutputStream fo = new FileOutputStream(f);
+            FileOutputStream fo = new FileOutputStream(MainActivity.photoFile);
             fo.write(bytes.toByteArray());
             fo.close();
 
             MediaScannerConnection.scanFile(mContext,
-                    new String[]{f.toString()}, null, null);
+                    new String[]{MainActivity.photoFile.toString()}, null, null);
 
 
-            Log.v(LOG_TAG, "FILE CREATED");
+            Log.v(LOG_TAG, "FILE CREATED at "+MainActivity.photoFile.getAbsolutePath());
         } catch (IOException e) {
             Log.v(LOG_TAG, "CANNOT CREATE FILE");
             e.printStackTrace();
