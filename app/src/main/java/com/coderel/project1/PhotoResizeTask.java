@@ -1,6 +1,6 @@
 package com.coderel.project1;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -32,6 +31,7 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         rootView.invalidate();
 
 
+
     }
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -40,9 +40,10 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
     private ImageView rootView;
 
 
+
     PhotoResizeTask(Context context,View view) {
-        this.mContext = context;
-        this.rootView = (ImageView)view;
+        mContext = context;
+        rootView = (ImageView)view;
 
 
     }
@@ -50,6 +51,10 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        ProgressDialog.show(AnotherPhotoActivity, "wait", "Your photo is being made", true);
+
+
+
 
     }
 

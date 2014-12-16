@@ -1,18 +1,12 @@
 package com.coderel.project1;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-
-import java.util.zip.Inflater;
 
 
 public class AnotherPhotoActivity extends ActionBarActivity {
@@ -21,7 +15,7 @@ public class AnotherPhotoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = getLayoutInflater();
-        View rootView = inflater.inflate(R.layout.activity_another_photo,null,false);
+        View rootView = inflater.inflate(R.layout.activity_another_photo,null);
 
         setContentView(R.layout.activity_another_photo);
 
@@ -29,10 +23,22 @@ public class AnotherPhotoActivity extends ActionBarActivity {
         photoResizeTask.execute(MainActivity.fileUri);
 
 
+
 //        Log.v("PHOTOPATH", filePath);
 //        Bitmap imageBitmap = BitmapFactory.decodeFile(PhotoResizeTask.f.getAbsolutePath());
 //        photoPreview.setImageBitmap(imageBitmap);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void onTakeAnotherPicture(View view) {
