@@ -67,11 +67,10 @@ public class MainActivity extends ActionBarActivity {
         //super.onActivityResult(requestCode, resultCode, data);
 
 
+        PhotoResizeTask photoResizeTask = new PhotoResizeTask(MainActivity.this);
+        photoResizeTask.execute(MainActivity.fileUri);
 
 
-        Intent anotherPhotoIntent = new Intent(this,AnotherPhotoActivity.class);
-//        Log.v("filePath in main activity", photoFile.getAbsolutePath());
-        startActivity(anotherPhotoIntent);
 
 
     }

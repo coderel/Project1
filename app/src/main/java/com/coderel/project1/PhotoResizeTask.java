@@ -1,7 +1,9 @@
 package com.coderel.project1;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -18,17 +20,25 @@ import java.io.IOException;
 /**
  * Created by Prasanna on 12/6/2014.
  */
-public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
+public class PhotoResizeTask extends AsyncTask<Uri, Void, String> {
 
 
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.photoFile.getAbsolutePath());
-        Log.v("size of image view pic",Integer.toString(bitmap.getHeight()));
-        rootView.setImageBitmap(bitmap);
-        rootView.invalidate();
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
+        if(progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
+        Intent anotherPhotoIntent = new Intent(mContext,AnotherPhotoActivity.class);
+//        Log.v("filePath in main activity", photoFile.getAbsolutePath());
+        mContext.startActivity(anotherPhotoIntent);
+//        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.photoFile.getAbsolutePath());
+//        Log.v("size of image view pic",Integer.toString(bitmap.getHeight()));
+//        rootView.setImageBitmap(bitmap);
+
+
 
 
 
@@ -38,12 +48,15 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
     private Bitmap squareBitmap;
     private final Context mContext;
     private ImageView rootView;
+    ProgressDialog progressDialog;
 
 
 
-    PhotoResizeTask(Context context,View view) {
+
+    PhotoResizeTask(Activity context) {
         mContext = context;
-        rootView = (ImageView)view;
+
+
 
 
     }
@@ -51,15 +64,11 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ProgressDialog.show(AnotherPhotoActivity, "wait", "Your photo is being made", true);
-
-
-
-
+       progressDialog = ProgressDialog.show(mContext, "wait", "Your photo is being made", true);
     }
 
     @Override
-    protected Void doInBackground(Uri... uris) {
+    protected String doInBackground(Uri... uris) {
 
         int photoShape; // to determine the shape of the picture (Portrait, landscape or square). Positive = landscape, Negative = portrait, 0 = square
         int scaleFactor;
@@ -134,9 +143,10 @@ public class PhotoResizeTask extends AsyncTask<Uri, Void, Void> {
         } catch (IOException e) {
             Log.v(LOG_TAG, "CANNOT CREATE FILE");
             e.printStackTrace();
+            return null;
         }
 
-        return null;
+        return MainActivity.photoFile.getAbsolutePath();
     }
 
     private Bitmap resizePhoto(Bitmap originalBitmap, int cropX, int cropY) {

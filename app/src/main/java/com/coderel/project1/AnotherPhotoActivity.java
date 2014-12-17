@@ -1,12 +1,14 @@
 package com.coderel.project1;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 
 public class AnotherPhotoActivity extends ActionBarActivity {
@@ -16,11 +18,11 @@ public class AnotherPhotoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = getLayoutInflater();
         View rootView = inflater.inflate(R.layout.activity_another_photo,null);
+        ((ImageView)rootView.findViewById(R.id.imageView_picture)).setImageBitmap(BitmapFactory.decodeFile(MainActivity.photoFile.getAbsolutePath()));
 
-        setContentView(R.layout.activity_another_photo);
+        setContentView(rootView);
 
-        PhotoResizeTask photoResizeTask = new PhotoResizeTask(getApplicationContext(),rootView.findViewById(R.id.imageView_picture));
-        photoResizeTask.execute(MainActivity.fileUri);
+
 
 
 
