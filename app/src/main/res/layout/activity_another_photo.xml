@@ -27,15 +27,17 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
-            android:layout_gravity="right|bottom" />
+            android:text="@string/button_exit"
+            android:id="@+id/button_exit"
+            android:layout_gravity="right|bottom"
+            android:onClick="onExit"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_gravity="left|bottom" />
+            android:text="@string/button_take_another_picture"
+            android:id="@+id/button_take_another_picture"
+            android:layout_gravity="left|bottom"
+            android:onClick="onTakeAnotherPicture"/>
     </FrameLayout>
 </LinearLayout>
