@@ -1,11 +1,14 @@
 package com.coderel.project1;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 
 public class AnotherPhotoActivity extends ActionBarActivity {
@@ -13,16 +16,39 @@ public class AnotherPhotoActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_another_photo);
+        LayoutInflater inflater = getLayoutInflater();
+        View rootView = inflater.inflate(R.layout.activity_another_photo,null);
+        ((ImageView)rootView.findViewById(R.id.imageView_picture)).setImageBitmap(BitmapFactory.decodeFile(MainActivity.photoFile.getAbsolutePath()));
+
+        setContentView(rootView);
+
+
+
+
+
+//        Log.v("PHOTOPATH", filePath);
+//        Bitmap imageBitmap = BitmapFactory.decodeFile(PhotoResizeTask.f.getAbsolutePath());
+//        photoPreview.setImageBitmap(imageBitmap);
 
     }
 
-    public void onTakeAnotherPicture(View view){
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void onTakeAnotherPicture(View view) {
         finish();
     }
 
-    public void onExit(View view){
-        Intent intent = new Intent(this,ShareActivity.class);
+    public void onExit(View view) {
+        Intent intent = new Intent(this, ShareActivity.class);
         startActivity(intent);
     }
 

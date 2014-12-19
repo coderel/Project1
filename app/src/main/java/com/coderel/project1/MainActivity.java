@@ -20,7 +20,8 @@ public class MainActivity extends ActionBarActivity {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final String PREFS_NAME = "instructionPreference";
-    private Uri fileUri;
+    public static Uri fileUri;
+    public static File photoFile;
 
 
 
@@ -28,20 +29,15 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences instructionPreference = getPreferences(MODE_PRIVATE);
-        boolean doNotShowInstruction = instructionPreference.getBoolean(PREFS_NAME, false);
-
-        if (doNotShowInstruction) {
-
-            startCameraIntent();
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+        }
 
 
 
 
 
-        } else {
-
-            setContentView(R.layout.activity_main);
+           setContentView(R.layout.activity_main);
 
             Button button = (Button) findViewById(R.id.button_take_picture);
 
@@ -53,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
 
-        }
+
     }
 
     private  void startCameraIntent(){
@@ -74,11 +70,10 @@ public class MainActivity extends ActionBarActivity {
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-        PhotoResizeTask photoResizeTask = new PhotoResizeTask(getApplicationContext());
-        photoResizeTask.execute(fileUri);
+        PhotoResizeTask photoResizeTask = new PhotoResizeTask(MainActivity.this);
+        photoResizeTask.execute(MainActivity.fileUri);
 
-        Intent anotherPhotoIntent = new Intent(this,AnotherPhotoActivity.class);
-        startActivity(anotherPhotoIntent);
+
 
 
     }
